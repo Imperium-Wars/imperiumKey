@@ -1,0 +1,65 @@
+protostar migrate migrations/migration_01_init.cairo --gateway-url https://alpha4-2.starknet.io/ --chain-id 1536727068981429685321 --account-address 0x072D4F3FA4661228ed0c9872007fc7e12a581E000FAd7b8f3e3e5bF9E6133207
+
+starknet deploy --no_wallet --contract ./build/main.json  --network alpha-goerli --feeder_gateway_url  https://alpha4-2.starknet.io --inputs 1359756685619878520730159446579155572586682931478487407542434680568789475783 --gateway_url https://alpha4-2.starknet.io/gateway
+
+starknet deploy --no_wallet --contract ./build/naming.json --network=alpha-goerli --inputs 2334028810369445206330698942514702979264550740171515448318444183910987371994 3078403161969756639851145137005649044492944186251889529851141775397258524346 2062164617078856708726359385275913687867681308215048325959467098459703644820 1576987121283045618657875225183003300580199140020787494777499595331436496159 0
+
+
+    assert baseTokenURI[0] = 105;
+    assert baseTokenURI[1] = 112;
+    assert baseTokenURI[2] = 102;
+    assert baseTokenURI[3] = 115;
+    assert baseTokenURI[4] = 58;
+    assert baseTokenURI[5] = 47;
+    assert baseTokenURI[6] = 47;
+    assert baseTokenURI[7] = 98;
+    assert baseTokenURI[8] = 97;
+    assert baseTokenURI[9] = 102;
+    assert baseTokenURI[10] = 121;
+    assert baseTokenURI[11] = 98;
+    assert baseTokenURI[12] = 101;
+    assert baseTokenURI[13] = 105;
+    assert baseTokenURI[14] = 97;
+    assert baseTokenURI[15] = 107;
+    assert baseTokenURI[16] = 110;
+    assert baseTokenURI[17] = 53;
+    assert baseTokenURI[18] = 120;
+    assert baseTokenURI[19] = 122;
+    assert baseTokenURI[20] = 100;
+    assert baseTokenURI[21] = 107;
+    assert baseTokenURI[22] = 117;
+    assert baseTokenURI[23] = 55;
+    assert baseTokenURI[24] = 110;
+    assert baseTokenURI[25] = 117;
+    assert baseTokenURI[26] = 52;
+    assert baseTokenURI[27] = 54;
+    assert baseTokenURI[28] = 114;
+    assert baseTokenURI[29] = 104;
+    assert baseTokenURI[30] = 99;
+    assert baseTokenURI[31] = 109;
+    assert baseTokenURI[32] = 97;
+    assert baseTokenURI[33] = 102;
+    assert baseTokenURI[34] = 121;
+    assert baseTokenURI[35] = 51;
+    assert baseTokenURI[36] = 114;
+    assert baseTokenURI[37] = 51;
+    assert baseTokenURI[38] = 53;
+    assert baseTokenURI[39] = 109;
+    assert baseTokenURI[40] = 117;
+    assert baseTokenURI[41] = 104;
+    assert baseTokenURI[42] = 114;
+    assert baseTokenURI[43] = 110;
+    assert baseTokenURI[44] = 55;
+    assert baseTokenURI[45] = 114;
+    assert baseTokenURI[46] = 117;
+    assert baseTokenURI[47] = 102;
+    assert baseTokenURI[48] = 50;
+    assert baseTokenURI[49] = 110;
+    assert baseTokenURI[50] = 100;
+    assert baseTokenURI[51] = 105;
+    assert baseTokenURI[52] = 101;
+    assert baseTokenURI[53] = 120;
+    assert baseTokenURI[54] = 121;
+    assert baseTokenURI[55] = 101;
+    assert baseTokenURI[56] = 122;
+    assert baseTokenURI[57] = 101;

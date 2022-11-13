@@ -1,5 +1,8 @@
 env
 
+### keys ###
+keys.text
+
 ### Protostar ###
 migrations/*.json
 

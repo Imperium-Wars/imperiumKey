@@ -11,7 +11,10 @@ from starkware.cairo.common.alloc import alloc
 from starkware.cairo.common.hash import hash2
 from starkware.cairo.common.bool import TRUE, FALSE
 
-from cairo_contracts.src.openzeppelin.access.ownable.library import Ownable
+from cairo_contracts.src.openzeppelin.access.ownable.library import (
+    Ownable, 
+    Ownable_owner
+)
 from cairo_contracts.src.openzeppelin.introspection.erc165.library import ERC165
 from cairo_contracts.src.openzeppelin.token.erc721.library import ERC721
 from cairo_contracts.src.openzeppelin.upgrades.library import Proxy
@@ -34,7 +37,7 @@ func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr
     owner: felt
 ) {
     ERC721.initializer('Imperium Wars Key', 'IKEY');
-    // _whitelisting_key.read(whitelisting_key);
+    _whitelisting_key.write(799085134889162279411547463466380106946633091380230638211634583888488020853);
     Ownable.initializer(owner);
     return ();
 }

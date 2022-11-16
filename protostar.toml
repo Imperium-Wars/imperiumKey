@@ -8,6 +8,8 @@ libs_path = "lib"
 main = [
     "src/main.cairo",
 ]
+proxy = ["lib/cairo_contracts/src/openzeppelin/upgrades/presets/Proxy.cairo"]
+
 
 ["profile.testnet2.protostar.deploy"]
 gateway-url="http://127.0.0.1:5050/"

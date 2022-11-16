@@ -18,6 +18,7 @@ from cairo_contracts.src.openzeppelin.access.ownable.library import (
 from cairo_contracts.src.openzeppelin.introspection.erc165.library import ERC165
 from cairo_contracts.src.openzeppelin.token.erc721.library import ERC721
 from cairo_contracts.src.openzeppelin.upgrades.library import Proxy
+from cairo_contracts.src.openzeppelin.token.erc721.enumerable.library import ERC721Enumerable
 
 from src.tokenURI import (
     _base_tokenURI,
@@ -29,29 +30,39 @@ from src.tokenURI import (
 
 
 //
-// Constructor 
+// Proxy 
 // 
 
-@constructor
-func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    owner: felt
+@external
+func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    proxy_admin: felt, owner: felt
 ) {
+    Proxy.initializer(proxy_admin);
     ERC721.initializer('Imperium Wars Key', 'IKEY');
+    ERC721Enumerable.initializer();
     _whitelisting_key.write(799085134889162279411547463466380106946633091380230638211634583888488020853);
     Ownable.initializer(owner);
+
+    // ///////////////
+    // Init config //
+    // ///////////////
+    _set_base_tokenURI(
+        88,
+        new (104,116,116,112,115,58,47,47,98,97,102,121,98,101,105,97,107,110,53,120,122,100,107,117,55,110,105,117,122,52,54,114,104,99,109,97,102,121,51,114,51,53,109,117,104,114,110,55,114,117,102,108,120,103,100,102,103,50,110,100,105,101,120,121,101,122,101,46,105,112,102,115,46,110,102,116,115,116,111,114,97,103,101,46,108,105,110,107),
+    );  // Set base token URI to: https://bafybeiakn5xzdku7niuz46rhcmafy3r35muhrn7ruflxgdfg2ndiexyeze.ipfs.nftstorage.link
+
     return ();
 }
 
-// @external
-// func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-//     proxy_admin: felt, whitelisting_key: felt
-// ) {
-//     Proxy.initializer(proxy_admin);
-//     _whitelisting_key.write(whitelisting_key);
-//     ERC721.initializer('Imperium Wars Key', 'IKEY');
+@external
+func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    new_implementation: felt
+) {
+    Proxy.assert_only_admin();
+    Proxy._set_implementation_hash(new_implementation);
+    return ();
+}
 
-//     return ();
-// }
 
 //
 // Storage
@@ -131,9 +142,8 @@ func tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 ) -> (tokenURI_len: felt, tokenURI: felt*) {
     alloc_locals;
     let (local base_token_uri_len, local base_token_uri) = base_tokenURI();
-    let (added_len) = _append_number_ascii(tokenId, base_token_uri + base_token_uri_len);
 
-    return (base_token_uri_len + added_len, base_token_uri);
+    return (base_token_uri_len, base_token_uri);
 }
 
 @external
@@ -187,7 +197,7 @@ func safe_transfer_from{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_ch
 }
 
 @external
-func whitelistMint{
+func whitelist_mint{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }(tokenId: Uint256, sig: (felt, felt)) {
     alloc_locals;
@@ -213,7 +223,7 @@ func whitelistMint{
 } 
 
 @external
-func endWhitelist{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+func end_whitelist{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     // Verify that caller is admin
     Ownable.assert_only_owner();
 
@@ -251,16 +261,3 @@ func renounce_ownership{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_ch
     Ownable.renounce_ownership();
     return ();
 }
-
-
-//
-// UPGRADABILITY
-//
-// @external
-// func upgrade{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-//     new_implementation: felt
-// ) {
-//     Proxy.assert_only_admin();
-//     Proxy._set_implementation_hash(new_implementation);
-//     return ();
-// }

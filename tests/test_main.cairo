@@ -37,13 +37,10 @@ func test_uri{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}()
 
     // test base tokenURI
     let (len_uri, uri) = tokenURI(Uint256(123, 0));
-    assert 6 = len_uri;
+    assert 3 = len_uri;
     assert uri[0] = 100;
     assert uri[1] = 101;
     assert uri[2] = 102;
-    assert uri[3] = 48 + 1;
-    assert uri[4] = 48 + 2;
-    assert uri[5] = 48 + 3;
 
     return ();
 }

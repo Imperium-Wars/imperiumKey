@@ -35,13 +35,13 @@ from src.tokenURI import (
 
 @external
 func initializer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-    proxy_admin: felt, owner: felt
+    proxy_admin: felt
 ) {
     Proxy.initializer(proxy_admin);
     ERC721.initializer('Imperium Wars Key', 'IKEY');
     ERC721Enumerable.initializer();
     _whitelisting_key.write(799085134889162279411547463466380106946633091380230638211634583888488020853);
-    Ownable.initializer(owner);
+    Ownable.initializer(proxy_admin);
 
     // ///////////////
     // Init config //
@@ -157,6 +157,11 @@ func set_base_tokenURI{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 @view
 func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
+    return Ownable.owner();
+}
+
+@view
+func owner2{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
     return Ownable.owner();
 }
 

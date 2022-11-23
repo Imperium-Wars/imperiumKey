@@ -1,12 +1,1 @@
-protostar migrate migrations/migration_01_init.cairo --gateway-url https://alpha4-2.starknet.io/ --chain-id 1536727068981429685321 --account-address 0x072D4F3FA4661228ed0c9872007fc7e12a581E000FAd7b8f3e3e5bF9E6133207
-
-
-// goerli 2
-starknet deploy --no_wallet --contract ./build/main.json  --network alpha-goerli --feeder_gateway_url  https://alpha4-2.starknet.io --inputs 396168387387384804602189594759434808707219879572254787549013133514236231294 799085134889162279411547463466380106946633091380230638211634583888488020853 --gateway_url https://alpha4-2.starknet.io/gateway
-
-// goerli 1
-starknet deploy --no_wallet --contract ./build/main.json  --network alpha-goerli --inputs 396168387387384804602189594759434808707219879572254787549013133514236231294
-protostar deploy ./build/main.json  --network alpha-goerli --inputs 396168387387384804602189594759434808707219879572254787549013133514236231294
-
-// Declare 
-starknet declare --contract ./build/main.json --network alpha-goerli --wallet 245075125714924486615190948638816023004312023366228441820064356618988829382 --feeder_gateway_url  https://alpha4-2.starknet.io --gateway_url https://alpha4-2.starknet.io/gateway
+python ./utils/deploy.py privatekey

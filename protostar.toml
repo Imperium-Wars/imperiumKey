@@ -3,7 +3,7 @@ protostar-version = "0.7.0"
 lib-path = "lib"
 cairo-path = ["./lib/cairo_contracts/src"]
 
-["protostar.contracts"]
+["contracts"]
 main = [
     "src/main.cairo",
 ]

@@ -1,8 +1,7 @@
-["protostar.config"]
-protostar_version = "0.6.0"
-
-["protostar.project"]
-libs_path = "lib"
+[project]
+protostar-version = "0.7.0"
+lib-path = "lib"
+cairo-path = ["./lib/cairo_contracts/src"]
 
 ["protostar.contracts"]
 main = [

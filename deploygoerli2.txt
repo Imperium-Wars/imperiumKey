@@ -1,1 +1,1 @@
-python ./utils/deploy.py privatekey
+python ./tools/deploy.py privatekey token

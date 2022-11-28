@@ -11,16 +11,16 @@ import sys
 argv = sys.argv
 
 deployer_account_addr = (
-    0x00e0392e312a52b010b3743ccb12476ad11b08ea296bf3f794638959d007fe7e
+    0x061b6c0a78f9edf13cea17b50719f3344533fadd470b8cb29c2b4318014f52d3
 )
 deployer_account_private_key = int(argv[1])
 token = argv[2] if len(argv) > 2 else None
-admin = 0x00e0392e312a52b010b3743ccb12476ad11b08ea296bf3f794638959d007fe7e
+admin = 0x061b6c0a78f9edf13cea17b50719f3344533fadd470b8cb29c2b4318014f52d3
 # MAINNET: https://alpha-mainnet.starknet.io/
 # TESTNET: https://alpha4.starknet.io/
 # TESTNET2: https://alpha4-2.starknet.io/
-network_base_url = "https://alpha4-2.starknet.io/"
-chainid: StarknetChainId = StarknetChainId.TESTNET
+network_base_url = "https://alpha-mainnet.starknet.io/"
+chainid: StarknetChainId = StarknetChainId.MAINNET
 max_fee = int(1e16)
 
 

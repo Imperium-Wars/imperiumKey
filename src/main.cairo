@@ -112,14 +112,14 @@ func ownerOf{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(to
 }
 
 @view
-func get_approved{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func getApproved{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     tokenId: Uint256
 ) -> (approved: felt) {
     return ERC721.get_approved(tokenId);
 }
 
 @view
-func is_approved_for_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func isApprovedForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     owner: felt, operator: felt
 ) -> (isApproved: felt) {
     let (isApproved: felt) = ERC721.is_approved_for_all(owner, operator);
@@ -160,11 +160,6 @@ func owner{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() ->
     return Ownable.owner();
 }
 
-@view
-func owner2{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() -> (owner: felt) {
-    return Ownable.owner();
-}
-
 //
 // Externals
 //
@@ -178,7 +173,7 @@ func approve{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
 }
 
 @external
-func set_approval_for_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func setApprovalForAll{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     operator: felt, approved: felt
 ) {
     ERC721.set_approval_for_all(operator, approved);
@@ -186,7 +181,7 @@ func set_approval_for_all{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
 }
 
 @external
-func transfer_from{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
+func transferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256
 ) {
     ERC721.transfer_from(from_, to, tokenId);
@@ -194,7 +189,7 @@ func transfer_from{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_p
 } 
 
 @external
-func safe_transfer_from{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
+func safeTransferFrom{pedersen_ptr: HashBuiltin*, syscall_ptr: felt*, range_check_ptr}(
     from_: felt, to: felt, tokenId: Uint256, data_len: felt, data: felt*
 ) {
     ERC721.safe_transfer_from(from_, to, tokenId, data_len, data);

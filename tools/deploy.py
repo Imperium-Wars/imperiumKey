@@ -1,11 +1,10 @@
 from starkware.starknet.compiler.compile import get_selector_from_name
 from starknet_py.net.models.chains import StarknetChainId
+from starknet_py.net.udc_deployer.deployer import Deployer
 from starknet_py.net import AccountClient, KeyPair
 from starknet_py.net.gateway_client import GatewayClient
-from starknet_py.net.networks import Network
-from starknet_py.transactions.deploy import make_deploy_tx
-from starknet_py.compile.compiler import create_contract_class
 import asyncio
+import json
 import sys
 
 argv = sys.argv
@@ -14,7 +13,6 @@ deployer_account_addr = (
     0x061b6c0a78f9edf13cea17b50719f3344533fadd470b8cb29c2b4318014f52d3
 )
 deployer_account_private_key = int(argv[1])
-token = argv[2] if len(argv) > 2 else None
 admin = 0x061b6c0a78f9edf13cea17b50719f3344533fadd470b8cb29c2b4318014f52d3
 # MAINNET: https://alpha-mainnet.starknet.io/
 # TESTNET: https://alpha4.starknet.io/
@@ -22,6 +20,8 @@ admin = 0x061b6c0a78f9edf13cea17b50719f3344533fadd470b8cb29c2b4318014f52d3
 network_base_url = "https://alpha-mainnet.starknet.io/"
 chainid: StarknetChainId = StarknetChainId.MAINNET
 max_fee = int(1e16)
+# deployer_address=0x041A78E741E5AF2FEC34B695679BC6891742439F7AFB8484ECD7766661AD02BF
+deployer = Deployer()
 
 
 async def main():
@@ -38,34 +38,45 @@ async def main():
         chain=chainid,
         supported_tx_version=1,
     )
-    logic_file = open("./build/main.json", "r")
+    impl_file = open("./build/main.json", "r")
     declare_contract_tx = await account.sign_declare_transaction(
-        compiled_contract=logic_file.read(), max_fee=max_fee
+        compiled_contract=impl_file.read(), max_fee=max_fee
     )
-    logic_file.close()
-    logic_declaration = await client.declare(
-        transaction=declare_contract_tx, token=token
-    )
-    logic_contract_class_hash = logic_declaration.class_hash
-    print("implementation class hash:", hex(logic_contract_class_hash))
+    impl_file.close()
+    impl_declaration = await client.declare(transaction=declare_contract_tx)
+    impl_contract_class_hash = impl_declaration.class_hash
+    print("implementation class hash:", hex(impl_contract_class_hash))
 
     proxy_file = open("./build/proxy.json", "r")
-    deploy_contract_tx = make_deploy_tx(
-        compiled_contract=create_contract_class(proxy_file.read()),
-        constructor_calldata=[
-            logic_contract_class_hash,
-            get_selector_from_name("initializer"),
-            1, # Number of arguments
-            admin, # Parameter 1
-        ],
-        version=1,
+    proxy_content = proxy_file.read()
+
+    declare_contract_tx = await account.sign_declare_transaction(
+        compiled_contract=proxy_content, max_fee=max_fee
     )
     proxy_file.close()
-    deployment_resp = await client.deploy(transaction=deploy_contract_tx, token=token)
-    print("deployment txhash:", hex(deployment_resp.transaction_hash))
-    print("proxied contract address:", hex(deployment_resp.contract_address))
+    proxy_declaration = await client.declare(transaction=declare_contract_tx)
+    proxy_contract_class_hash = proxy_declaration.class_hash
+    print("proxy class hash:", hex(proxy_contract_class_hash))
+
+    proxy_json = json.loads(proxy_content)
+    abi = proxy_json["abi"]
+    deploy_call, address = deployer.create_deployment_call(
+        class_hash=proxy_contract_class_hash,
+        abi=abi,
+        calldata={
+            "implementation_hash": impl_contract_class_hash,
+            "selector": get_selector_from_name("initializer"),
+        },
+    )
+
+    resp = await account.execute(deploy_call, max_fee=int(1e16))
+    print("deployment txhash:", hex(resp.transaction_hash))
+    print("proxied contract address:", hex(address))
 
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
+
+#implementation class hash: 0x568b81a076b22080ba661722ebb112a4dc40498ba32048fecd942747f0b9c10
+#proxy class hash: 0x1efa8f84fd4dff9e2902ec88717cf0dafc8c188f80c3450615944a469428f7f

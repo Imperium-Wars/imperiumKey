@@ -81,7 +81,7 @@ func _blacklisted_mint(address: felt) -> (boolean: felt) {
 //
 
 @view
-func supports_Interface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+func supportsInterface{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
     interfaceId: felt
 ) -> (success: felt) {
     return ERC165.supports_interface(interfaceId);
